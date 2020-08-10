@@ -20,16 +20,16 @@ module.exports = (app) => {
     const util = require("util");
     client.get = util.promisify(client.get);
 
-    //  Do we have any cached data in redis relate with this query
+    //  Do we have any cached data in redis relate with this query --
     const cachedBlogs = await client.get(req.user.id);
 
-    //  If yes, send it to client
+    //  If yes, send it to client --
     if (cachedBlogs) {
       console.log("DATA FROM REDIS");
       return res.send(JSON.parse(cachedBlogs));
     }
 
-    //  If no, reach out MongoDB to get data, set it in redis and return to client
+    //  If no, reach out MongoDB to get data, set it in redis and return to client --
     const blogs = await Blog.find({ _user: req.user.id });
     client.set(req.user.id, JSON.stringify(blogs));
     console.log("DATA FROM MONGODB");
